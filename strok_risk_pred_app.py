@@ -11,7 +11,7 @@ st.set_page_config(
     page_title="Stroke Risk Predictor",
     page_icon="🧠",
     layout="wide",
-    initial_sidebar_state="collapsed"   # FIX 2: sidebar toggle visible
+    initial_sidebar_state="collapsed"
 )
 
 # ==========================================================
@@ -35,49 +35,68 @@ except FileNotFoundError:
 st.markdown("""
 <style>
 
-#MainMenu {visibility:hidden;}
-footer {visibility:hidden;}
-header {visibility:hidden;}
+/* Hide only menu and footer — NOT header (header hides sidebar toggle) */
+#MainMenu {visibility: hidden;}
+footer    {visibility: hidden;}
 
+/* Background */
 .stApp {
     background: linear-gradient(135deg, #F6FCFF, #EAF8FF);
 }
 
-/* FIX 1: Input labels visible */
-label, div[data-testid="stSelectbox"] label,
-div[data-testid="stNumberInput"] label {
+/* FIX: Input labels */
+label {
     color: #1f2937 !important;
     font-size: 15px !important;
     font-weight: 600 !important;
 }
 
+/* FIX: Metric values and labels */
+div[data-testid="stMetric"] {
+    background: white;
+    padding: 12px;
+    border-radius: 10px;
+    box-shadow: 0px 3px 10px rgba(0,0,0,0.1);
+    text-align: center;
+}
+div[data-testid="stMetricLabel"] p {
+    color: #6b7280 !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+}
+div[data-testid="stMetricValue"] {
+    color: #111827 !important;
+    font-size: 22px !important;
+    font-weight: 700 !important;
+}
+
 /* Header */
 .main-header {
     background: linear-gradient(90deg, #0EA5E9, #2563EB);
-    padding: 25px;
+    padding: 28px;
     border-radius: 18px;
     text-align: center;
     box-shadow: 0px 8px 20px rgba(0,0,0,0.15);
     margin-bottom: 25px;
 }
-.main-header h1 { color: white; font-size: 40px; margin-bottom: 5px; }
-.main-header p  { color: white; font-size: 18px; margin: 0; }
+.main-header h1 { color: white; font-size: 38px; margin: 0 0 6px 0; }
+.main-header p  { color: rgba(255,255,255,0.9); font-size: 17px; margin: 0; }
 
 /* Section titles */
 .section-title {
-    font-size: 20px;
+    font-size: 19px;
     font-weight: bold;
     color: #0F766E;
-    margin-bottom: 12px;
-    padding: 10px 0;
+    padding-bottom: 8px;
     border-bottom: 2px solid #0EA5E9;
+    margin-bottom: 14px;
 }
 
 /* Button */
 .stButton > button {
     background: linear-gradient(90deg, #14B8A6, #0EA5E9);
-    color: white;
-    font-size: 20px;
+    color: white !important;
+    font-size: 18px;
     font-weight: bold;
     padding: 14px;
     border: none;
@@ -89,45 +108,60 @@ div[data-testid="stNumberInput"] label {
 
 /* Sidebar */
 section[data-testid="stSidebar"] { background: #0F172A; }
-section[data-testid="stSidebar"] * { color: white; }
+section[data-testid="stSidebar"] * { color: white !important; }
 
-/* FIX 4 & 6: Result cards — dark readable text */
+/* Result cards */
 .success-card {
     background: #DCFCE7;
-    padding: 25px;
+    padding: 25px 30px;
     border-radius: 15px;
     border-left: 8px solid #22C55E;
-    margin-bottom: 15px;
+    margin-top: 10px;
 }
 .success-card h2, .success-card h3,
-.success-card p,  .success-card li { color: #14532d; }
-.success-card h2 { font-size: 26px; margin-bottom: 10px; }
-.success-card h3 { font-size: 20px; margin-top: 18px; margin-bottom: 8px; }
-.success-card p, .success-card li { font-size: 16px; line-height: 2; }
-.success-card ul { padding-left: 20px; }
+.success-card p,  .success-card li {
+    color: #14532d !important;
+}
+.success-card h2 { font-size: 26px; margin: 0 0 10px 0; }
+.success-card h3 { font-size: 19px; margin: 18px 0 8px 0; }
+.success-card p  { font-size: 16px; line-height: 1.7; margin: 0; }
+.success-card ul { padding-left: 22px; margin: 0; }
+.success-card li { font-size: 16px; line-height: 2.1; }
 
 .danger-card {
     background: #FEE2E2;
-    padding: 25px;
+    padding: 25px 30px;
     border-radius: 15px;
     border-left: 8px solid #EF4444;
-    margin-bottom: 15px;
+    margin-top: 10px;
 }
 .danger-card h2, .danger-card h3,
-.danger-card p,  .danger-card li { color: #7f1d1d; }
-.danger-card h2 { font-size: 26px; margin-bottom: 10px; }
-.danger-card h3 { font-size: 20px; margin-top: 18px; margin-bottom: 8px; }
-.danger-card p, .danger-card li { font-size: 16px; line-height: 2; }
-.danger-card ul { padding-left: 20px; }
+.danger-card p,  .danger-card li {
+    color: #7f1d1d !important;
+}
+.danger-card h2 { font-size: 26px; margin: 0 0 10px 0; }
+.danger-card h3 { font-size: 19px; margin: 18px 0 8px 0; }
+.danger-card p  { font-size: 16px; line-height: 1.7; margin: 0; }
+.danger-card ul { padding-left: 22px; margin: 0; }
+.danger-card li { font-size: 16px; line-height: 2.1; }
 
 .info-card {
     background: #DBEAFE;
-    padding: 20px;
+    padding: 20px 25px;
     border-radius: 12px;
+    margin-top: 10px;
 }
-.info-card h3, .info-card p { color: #1e3a5f; }
-.info-card h3 { font-size: 20px; margin-bottom: 10px; }
-.info-card p  { font-size: 15px; line-height: 1.8; }
+.info-card h3 { color: #1e3a5f !important; font-size: 19px; margin: 0 0 10px 0; }
+.info-card p  { color: #1e3a5f !important; font-size: 15px; line-height: 1.8; margin: 0; }
+
+/* Footer */
+.footer {
+    text-align: center;
+    color: #9ca3af;
+    font-size: 13px;
+    margin-top: 20px;
+    padding-bottom: 10px;
+}
 
 </style>
 """, unsafe_allow_html=True)
@@ -151,9 +185,9 @@ with st.sidebar:
     st.title("🏥 About")
     st.info("""
 ### Stroke Risk Predictor
-This application predicts whether a patient
-is at risk of Stroke using a trained
-Decision Tree Machine Learning model.
+This app predicts whether a patient is at
+risk of stroke using a trained Decision
+Tree Machine Learning model.
 """)
     st.divider()
     st.markdown("### 📊 Model Info")
@@ -173,7 +207,7 @@ Decision Tree Machine Learning model.
 """)
 
 # ==========================================================
-# INPUT SECTIONS
+# INPUT FORM
 # ==========================================================
 
 left, right = st.columns(2)
@@ -181,12 +215,13 @@ left, right = st.columns(2)
 with left:
     st.markdown('<div class="section-title">👤 Personal Information</div>',
                 unsafe_allow_html=True)
-    gender     = st.selectbox("Gender", ["Male", "Female", "Other"])
-    age        = st.number_input("Age", min_value=1, max_value=100, value=45)
+    gender       = st.selectbox("Gender", ["Male", "Female", "Other"])
+    age          = st.number_input("Age", min_value=1, max_value=100, value=45)
     ever_married = st.selectbox("Ever Married", ["Yes", "No"])
-    residence  = st.selectbox("Residence Type", ["Urban", "Rural"])
-    work_type  = st.selectbox("Work Type",
-                    ["Private", "Self-employed", "Govt_job", "children", "Never_worked"])
+    residence    = st.selectbox("Residence Type", ["Urban", "Rural"])
+    work_type    = st.selectbox("Work Type",
+                     ["Private", "Self-employed", "Govt_job",
+                      "children", "Never_worked"])
 
 with right:
     st.markdown('<div class="section-title">❤️ Health Information</div>',
@@ -194,11 +229,11 @@ with right:
     hypertension  = st.selectbox("Hypertension", ["No", "Yes"])
     heart_disease = st.selectbox("Heart Disease", ["No", "Yes"])
     avg_glucose   = st.number_input("Average Glucose Level",
-                        min_value=50.0, max_value=300.0, value=100.0)
+                      min_value=50.0, max_value=300.0, value=100.0)
     bmi           = st.number_input("Body Mass Index (BMI)",
-                        min_value=10.0, max_value=60.0, value=25.0)
+                      min_value=10.0, max_value=60.0, value=25.0)
     smoking       = st.selectbox("Smoking Status",
-                        ["never smoked", "formerly smoked", "smokes", "Unknown"])
+                      ["never smoked", "formerly smoked", "smokes", "Unknown"])
 
 # ==========================================================
 # ENCODING MAPS
@@ -214,23 +249,23 @@ smoking_map   = {"Unknown": 0, "formerly smoked": 1,
 binary_map    = {"No": 0, "Yes": 1}
 
 # ==========================================================
-# PREDICT BUTTON  (FIX 3: single br, no st.write gaps)
+# PREDICT BUTTON
 # ==========================================================
 
 st.markdown("<br>", unsafe_allow_html=True)
 predict = st.button("🩺 Analyze Stroke Risk")
 
 # ==========================================================
-# PREDICTION LOGIC
+# PREDICTION
 # ==========================================================
 
 if predict:
 
     with st.spinner("Analyzing patient data..."):
-        progress = st.progress(0)
+        bar = st.progress(0)
         for i in range(100):
             time.sleep(0.01)
-            progress.progress(i + 1)
+            bar.progress(i + 1)
 
     input_data = np.array([[
         gender_map[gender],
@@ -250,37 +285,52 @@ if predict:
 
     st.divider()
 
-    # PATIENT SUMMARY
-    st.subheader("📋 Patient Summary")
+    # --------------------------------------------------
+    # PATIENT SUMMARY — use markdown not subheader
+    # --------------------------------------------------
+    st.markdown("### 📋 Patient Summary")
     c1, c2, c3, c4 = st.columns(4)
     with c1: st.metric("Age",     f"{age} yrs")
     with c2: st.metric("BMI",     f"{bmi:.1f}")
     with c3: st.metric("Glucose", f"{avg_glucose:.1f}")
     with c4: st.metric("BP",      hypertension)
 
-    # PROBABILITY BAR  (FIX 1: /100)
-    st.subheader("📊 Estimated Stroke Risk")
-    st.progress(min(int(probability), 100) / 100)
-    color = "🟢" if probability < 30 else ("🟡" if probability < 70 else "🔴")
-    st.markdown(f"### {color} Risk Probability: **{probability:.1f}%**")
+    st.markdown("<br>", unsafe_allow_html=True)
 
-    # RESULT CARDS  (FIX 4,5,6: all content inside one div, no floating emojis)
+    # --------------------------------------------------
+    # PROBABILITY BAR — inside HTML so no floating emoji
+    # --------------------------------------------------
+    color_dot = "🟢" if probability < 30 else ("🟡" if probability < 70 else "🔴")
+
+    st.markdown("### 📊 Estimated Stroke Risk")
+    st.progress(min(int(probability), 100) / 100)
+    st.markdown(
+        f"<h4 style='color:#1f2937;'>{color_dot} Risk Probability: "
+        f"<span style='color:#0EA5E9;'>{probability:.1f}%</span></h4>",
+        unsafe_allow_html=True
+    )
+
+    st.markdown("<br>", unsafe_allow_html=True)
+
+    # --------------------------------------------------
+    # RESULT CARDS — everything inside div, no st widgets
+    # --------------------------------------------------
     if prediction == 1:
         st.markdown("""
         <div class="danger-card">
             <h2>⚠️ High Stroke Risk Detected</h2>
             <p>The model predicts this patient has a higher probability of stroke.
-               Please consult a qualified healthcare professional immediately.
-               This prediction should NOT replace medical diagnosis.</p>
+            Please consult a qualified healthcare professional immediately.
+            This prediction should NOT replace medical diagnosis.</p>
             <h3>💡 Health Recommendations</h3>
             <ul>
                 <li>Monitor Blood Pressure Regularly</li>
                 <li>Keep Blood Sugar Under Control</li>
                 <li>Quit Smoking Immediately</li>
-                <li>Exercise Daily (30 mins minimum)</li>
+                <li>Exercise Daily — minimum 30 minutes</li>
                 <li>Reduce Salt Intake</li>
                 <li>Eat More Fruits and Vegetables</li>
-                <li>Maintain Healthy Body Weight</li>
+                <li>Maintain a Healthy Body Weight</li>
                 <li>Follow Your Doctor's Advice</li>
             </ul>
         </div>
@@ -290,24 +340,26 @@ if predict:
         <div class="success-card">
             <h2>✅ Low Stroke Risk</h2>
             <p>The model predicts a lower risk of stroke.
-               Keep maintaining a healthy lifestyle.
-               Regular medical checkups are always recommended.</p>
+            Keep maintaining a healthy lifestyle.
+            Regular medical checkups are always recommended.</p>
             <h3>🌿 Healthy Lifestyle Tips</h3>
             <ul>
                 <li>Stay Physically Active</li>
-                <li>Eat Healthy Food</li>
+                <li>Eat Healthy and Balanced Food</li>
                 <li>Drink Plenty of Water</li>
                 <li>Sleep 7–8 Hours Daily</li>
-                <li>Maintain Healthy Weight</li>
+                <li>Maintain a Healthy Weight</li>
                 <li>Avoid Smoking</li>
-                <li>Reduce Stress</li>
+                <li>Manage and Reduce Stress</li>
                 <li>Monitor Blood Pressure Regularly</li>
             </ul>
         </div>
         """, unsafe_allow_html=True)
 
+    # --------------------------------------------------
     # DISCLAIMER
-    st.divider()
+    # --------------------------------------------------
+    st.markdown("<br>", unsafe_allow_html=True)
     st.markdown("""
     <div class="info-card">
         <h3>⚕️ Disclaimer</h3>
@@ -319,8 +371,13 @@ if predict:
     """, unsafe_allow_html=True)
 
 # ==========================================================
-# FOOTER
+# FOOTER — pure HTML so no floating emoji
 # ==========================================================
 
-st.markdown("<br>", unsafe_allow_html=True)
-st.caption("Developed with ❤️ using Streamlit | Stroke Risk Prediction System | © 2026")
+st.markdown("""
+<br>
+<div class="footer">
+    Developed with ❤️ using Streamlit &nbsp;|&nbsp;
+    Stroke Risk Prediction System &nbsp;|&nbsp; © 2026
+</div>
+""", unsafe_allow_html=True)
