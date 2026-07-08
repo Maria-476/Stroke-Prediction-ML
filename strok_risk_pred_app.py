@@ -20,7 +20,7 @@ st.set_page_config(
 
 @st.cache_resource
 def load_model():
-    return joblib.load("model_dt.pkl")
+    return joblib.load("model_rf.pkl")
 
 try:
     model = load_model()
@@ -191,8 +191,8 @@ Tree Machine Learning model.
 """)
     st.divider()
     st.markdown("### 📊 Model Info")
-    st.write("**Algorithm:** Decision Tree")
-    st.write("**Recall Score:** 0.88")
+    st.write("**Algorithm:** Random Forest")
+    st.write("**Recall Score:** 0.87")
     st.write("**Version:** 1.0")
     st.write("**Developer:** Maria Anwar")
     st.write("**Purpose:** Educational")
