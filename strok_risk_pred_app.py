@@ -30,12 +30,12 @@ st.markdown("""
 # 2. Load the Saved Model Safely
 @st.cache_resource
 def load_model():
-    return joblib.load("decision_tree_model.pkl")
+    return joblib.load("model_dt.pkl")
 
 try:
     model = load_model()
 except FileNotFoundError:
-    st.error("Error: 'decision_tree_model.pkl' not found. Please save your model first.")
+    st.error("Error: 'model_dt.pkl' not found. Please save your model first.")
     st.stop()
 
 # 3. App Header
