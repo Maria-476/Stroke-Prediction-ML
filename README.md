@@ -48,7 +48,7 @@ hypertension, age, BMI alongside glucose level.
 - **Imbalance handling:** class_weight='balanced'
 
 ## Live App
-[🚀 Click here to open the app](https://github.com/Maria-476/Stroke-Prediction-ML.git)
+[🚀 Click here to open the app](https://stroke-prediction-mlgit-jmcff7ampsc5omugoauesh.streamlit.app/)
 
 ## Libraries
 pandas, numpy, matplotlib, seaborn, scikit-learn, streamlit, joblib
